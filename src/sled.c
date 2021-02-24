@@ -14,6 +14,11 @@ char * fake_argv[] = {"sled", NULL};
 // Main entry point.
 int main(int argc, char** argv) {
 	stdio_init_all();
+
+	while(!tud_cdc_n_connected(0)) {
+		sleep_ms(100);
+	}
+
 	printf("Hello!!\n");
 	int ret = sled_main(fake_argc, fake_argv);
 	printf("sled exited!\n");

@@ -10,6 +10,7 @@ pico_sdk_init()
 add_executable(sled)
 
 pico_generate_pio_header(sled ${CMAKE_SOURCE_DIR}/src/ws2812.pio OUTPUT_DIR ${CMAKE_SOURCE_DIR}/generated)
+pico_generate_pio_header(sled ${CMAKE_SOURCE_DIR}/src/st7789_lcd.pio OUTPUT_DIR ${CMAKE_SOURCE_DIR}/generated)
 
 target_sources(sled PRIVATE
     src/sled.c
@@ -37,10 +38,11 @@ list(JOIN include_dirs " " include_dirs_string)
 message(STATUS "found dirs: ${include_dirs_string}")
 
 add_dependencies(sled libsled.a)
-add_custom_target(libsled.a CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CPP_COMPILER} CFLAGS=-g\ ${include_dirs_string}\ ${CMAKE_C_FLAGS} CXXFLAGS=${CMAKE_CPP_FLAGS} make -C ${CMAKE_SOURCE_DIR}/sled libsled.a)
+add_custom_target(libsled.a CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CPP_COMPILER} CFLAGS=-O3\ ${include_dirs_string}\ ${CMAKE_C_FLAGS} CXXFLAGS=${CMAKE_CPP_FLAGS} make -C ${CMAKE_SOURCE_DIR}/sled libsled.a)
 
 # depending on internal target names
 # you love to see it
 add_dependencies(libsled.a sled_ws2812_pio_h)
+add_dependencies(libsled.a sled_st7789_lcd_pio_h)
 
 pico_add_extra_outputs(sled)
