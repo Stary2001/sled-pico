@@ -37,8 +37,13 @@ list(TRANSFORM include_dirs PREPEND "-I")
 list(JOIN include_dirs " " include_dirs_string)
 message(STATUS "found dirs: ${include_dirs_string}")
 
+string(TOUPPER ${CMAKE_BUILD_TYPE} tmp)
+set(CMAKE_REAL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${tmp}}")
+
+message(STATUS ${CMAKE_REAL_C_FLAGS})
+
 add_dependencies(sled libsled.a)
-add_custom_target(libsled.a CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CPP_COMPILER} CFLAGS=-O3\ ${include_dirs_string}\ ${CMAKE_C_FLAGS} CXXFLAGS=${CMAKE_CPP_FLAGS} make -C ${CMAKE_SOURCE_DIR}/sled libsled.a)
+add_custom_target(libsled.a CC=${CMAKE_C_COMPILER}  CFLAGS=${include_dirs_string}\ ${CMAKE_REAL_C_FLAGS} make -C ${CMAKE_SOURCE_DIR}/sled libsled.a)
 
 # depending on internal target names
 # you love to see it

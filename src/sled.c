@@ -15,8 +15,10 @@ char * fake_argv[] = {"sled", NULL};
 int main(int argc, char** argv) {
 	stdio_init_all();
 
-	while(!tud_cdc_n_connected(0)) {
+	int n_attempts = 20;
+	while(!tud_cdc_n_connected(0) && n_attempts > 0) {
 		sleep_ms(100);
+		n_attempts--;
 	}
 
 	printf("Hello!!\n");
